@@ -30,10 +30,10 @@ FILES=(
     "chem.fpsmi"
 )
 
-# Download each file
+# Download each file with SSL certificate verification disabled
 for file in "${FILES[@]}"; do
     echo "Downloading $file..."
-    curl -o "./data/$file" "$BASE_URL/$file"
+    curl -k -o "./data/$file" "$BASE_URL/$file"
 done
 
 echo "Download complete."
