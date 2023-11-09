@@ -69,10 +69,13 @@ for repre in repres :
 			result=[]
 			result_mcc=[]
 			for cv in range(1,5):
-				gt = readdata(cv, dataname, "label","")
-				pr = readdata(cv, dataname, repre, method)
-				result.append( get_clf_result(gt,pr)[EVL_MTR] )
-				result_mcc.append( get_clf_result(gt,pr)[EVL_MCC] )
+				try:
+					gt = readdata(cv, dataname, "label","")
+					pr = readdata(cv, dataname, repre, method)
+					result.append( get_clf_result(gt,pr)[EVL_MTR] )
+					result_mcc.append( get_clf_result(gt,pr)[EVL_MCC] )
+				except:
+					print("Did not work!!!!", dataname)
 			print (np.mean(result))
 			print (np.mean(result_mcc))
 
@@ -88,12 +91,15 @@ for repre in repres :
 	for dataname in datanames :
 		result=[]
 		for cv in range(1,21):
-			gt = readdata(cv, dataname, "label","")
-			tpr=[]
-			for method in methods:
-				tpr.append(readdata(cv, dataname, repre, method))
-			pr = aggregation(tpr)
-			result.append( get_clf_result(gt,pr)[EVL_MTR] )
+			try:
+				gt = readdata(cv, dataname, "label","")
+				tpr=[]
+				for method in methods:
+					tpr.append(readdata(cv, dataname, repre, method))
+				pr = aggregation(tpr)
+				result.append( get_clf_result(gt,pr)[EVL_MTR] )
+			except:
+				print("Did not work!!!!", dataname)
 		print (np.mean(result))
                
 
@@ -110,12 +116,15 @@ for method in methods:
 	for dataname in datanames :
 		result=[]
 		for cv in range(1,21):
-			gt = readdata(cv, dataname, "label","")
-			tpr=[]
-			for repre in repres :
-				tpr.append(readdata(cv, dataname, repre, method))
-			pr = aggregation(tpr)
-			result.append( get_clf_result(gt,pr)[EVL_MTR] )
+			try:
+				gt = readdata(cv, dataname, "label","")
+				tpr=[]
+				for repre in repres :
+					tpr.append(readdata(cv, dataname, repre, method))
+				pr = aggregation(tpr)
+				result.append( get_clf_result(gt,pr)[EVL_MTR] )
+			except:
+				print("Did not work!!!!", dataname)
 		print (np.mean(result))
 #--------------------------------------
 # total ensemble
@@ -127,15 +136,18 @@ print("total","\n")
 for dataname in datanames :
 	result=[]
 	for cv in range(1,21):
-		gt = readdata(cv, dataname, "label","")
-		tpr=[]
-		for method in methods:
-			for repre in repres :
-				#if repre=="smiles" : continue
-				if repre=="smiles" and method!="nn" : continue
-				tpr.append(readdata(cv, dataname, repre, method))
-		pr = aggregation(tpr)
-		result.append( get_clf_result(gt,pr)[EVL_MTR] )
+		try:
+			gt = readdata(cv, dataname, "label","")
+			tpr=[]
+			for method in methods:
+				for repre in repres :
+					#if repre=="smiles" : continue
+					if repre=="smiles" and method!="nn" : continue
+					tpr.append(readdata(cv, dataname, repre, method))
+			pr = aggregation(tpr)
+			result.append( get_clf_result(gt,pr)[EVL_MTR] )
+		except:
+			print("Did not work!!!!", dataname)
 	print (np.mean(result))
 
 #--------------------------------------
@@ -145,17 +157,20 @@ print("weight learned","\n")
 for dataname in datanames :
 	result=[]
 	for cv in range(1,6):
-		gt = readdata(cv, dataname, "label","")
-#		pr = readdata(cv, dataname, "learned","svmtmp")
-#		pr = readdata(cv, dataname, "learned","nnlasso")
-#	        pr = readdata(cv, dataname, "learned","bayes")
-#		pr = readdata(cv, dataname, "learned","nnnn")
-		pr = readdata(cv, dataname, "learned","nnsvm")
-#		pr = readdata(cv, dataname, "learned","reg")
-#		pr = readdata(cv, dataname, "learned","gbm")
-#		pr = readdata(cv, dataname, "learned","rf")
-#		pr = readdata(cv, dataname, "learned","svm")
-#		pr = readdata(cv, dataname, "learned","nns")
-#		pr = readdata2(cv, dataname, "learned","")
-		result.append( get_clf_result(gt,pr)[EVL_MTR] )
+		try:
+			gt = readdata(cv, dataname, "label","")
+	#		pr = readdata(cv, dataname, "learned","svmtmp")
+	#		pr = readdata(cv, dataname, "learned","nnlasso")
+	#	        pr = readdata(cv, dataname, "learned","bayes")
+	#		pr = readdata(cv, dataname, "learned","nnnn")
+			pr = readdata(cv, dataname, "learned","nnsvm")
+	#		pr = readdata(cv, dataname, "learned","reg")
+	#		pr = readdata(cv, dataname, "learned","gbm")
+	#		pr = readdata(cv, dataname, "learned","rf")
+	#		pr = readdata(cv, dataname, "learned","svm")
+	#		pr = readdata(cv, dataname, "learned","nns")
+	#		pr = readdata2(cv, dataname, "learned","")
+			result.append( get_clf_result(gt,pr)[EVL_MTR] )
+		except:
+			print("Did not work!!!!", dataname)
 	print (np.mean(result))
