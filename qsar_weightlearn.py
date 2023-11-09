@@ -4,6 +4,9 @@ import time
 import re
 import math
 import numpy as np
+from keras.models import Model
+from keras.layers import Input, LSTM, Convolution1D, Dropout, GRU, Flatten, Dense, Activation, Masking, Dense, Add
+
 
 from sequtils import *
 
