@@ -106,7 +106,7 @@ for dataname in datanames:
 		model.summary()
 		model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-		his = model.fit(x_train, y_train, nb_epoch=30, batch_size=256, shuffle=True,
+		his = model.fit(x_train, y_train, n_epoch=30, batch_size=256, shuffle=True,
 										validation_data=(x_test, y_test) )
 		y_pred = model.predict(x_test)
 		rslt = print_result(y_test, y_pred, desc+"learning")
