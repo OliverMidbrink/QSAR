@@ -1,4 +1,3 @@
-from sklearn.datasets import make_classification
 from sklearn.cross_validation import cross_val_score
 from bayes_opt import BayesianOptimization
 

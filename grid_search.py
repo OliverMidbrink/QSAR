@@ -1,7 +1,7 @@
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 
-from sequtils     import *
+from sequtils import *
 
 #---------------------------------------------------------------------------
 # Parameters
@@ -33,11 +33,11 @@ tuned_parameters = [{'C': [0.0001, 0.001, 0.01, 0.05, 0.1, 0.5, 1, 10, 100, 1000
 clf = GridSearchCV(svm.LinearSVC(C=1), tuned_parameters, cv=5, scoring='roc_auc')
 
 tuned_parameters = [{'n_estimators': [1, 10, 100, 1000]}]
-for RF
+# for RF
 tuned_parameters = [{'n_estimators': [1, 10, 100, 1000, 1500, 2000, 5000]}]
 clf = GridSearchCV(RandomForestClassifier(n_estimators=1), tuned_parameters, cv=5, scoring='roc_auc')
 
-for GBM
+# for GBM
 tuned_parameters = [{'n_estimators': [1, 10, 100, 1000, 1500, 2000, 5000]}]
 clf = GridSearchCV(GradientBoostingClassifier(n_estimators=1), tuned_parameters, cv=5, scoring='roc_auc')
 
@@ -61,6 +61,8 @@ print(classification_report(y_true, y_pred))
 #---------------------------------------------------------------------------
 # Results
 #---------------------------------------------------------------------------
+
+"""
 Best parameters set found on development set:
 {'C': 0.05}
 Grid scores on development set:
@@ -96,3 +98,5 @@ Grid scores on development set:
 0.871 (+/-0.004) for {'n_estimators': 1500}
 0.870 (+/-0.004) for {'n_estimators': 2000}
 0.863 (+/-0.003) for {'n_estimators': 5000}
+
+"""

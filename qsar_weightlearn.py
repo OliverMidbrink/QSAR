@@ -4,7 +4,6 @@ import time
 import re
 import math
 import numpy as np
-from sklearn.metrics import roc_auc_score, confusion_matrix
 
 from sequtils import *
 
@@ -43,7 +42,7 @@ def readdataall(path, idx, dataname, repres, methods):
 			if repre=="smiles" and method!="nn" : continue
 			if repre=="smiles" : continue
 		if repre!="smiles" and method=="nn" : continue
-			total_pr.append(readdata(path, idx, dataname, repre, method))
+		total_pr.append(readdata(path, idx, dataname, repre, method))
 	total_pr = np.transpose(np.array(total_pr))
 	return total_pr.tolist()
 

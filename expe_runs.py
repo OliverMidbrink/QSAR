@@ -9,5 +9,5 @@ dataname = [  "U_1851_1a2", "U_1851_2c19", "U_1851_2c9", "U_1851_2d6", "U_1851_3
 
 for data in dataname :
 	command = "python qsar_classify.py all "+data
-	print command
+	print (command)
 	os.system(command)

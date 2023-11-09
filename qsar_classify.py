@@ -1,6 +1,9 @@
 from sequtils import *
 from models import *
 import os
+import sys
+from sklearn.model_selection import TimeSeriesSplit
+
 
 GPUID = "4"
 os.environ["CUDA_VISIBLE_DEVICES"] = str(GPUID)
@@ -27,11 +30,11 @@ isRandom  =False #otherwise define split option such as StratifiedKFold, TimeSer
 # Final Test
 #---------------------------------------------------------------------------
 def final_test(idx, X_train, y_train, X_test, y_test, repre, method, desc, path ) :
-	print(idx)
-	MAXITR=100
-	desc = desc+" "+method
-	fp  = open(path+str(idx)+"/"+dataname+"_"+repre+"_"+method+"_pred.txt",'w')
-
+	print(idx)   
+	MAXITR=100  
+	desc = desc + " " + method
+	print(os.getcwd()) 
+	fp  = open(path+str(idx)+"/"+dataname+"_"+repre+"_"+method+"_pred.txt", 'w')
 	if repre=="smiles" :
 		params = [EPOCH, FFL, n_filters, filter_len, rnn_len, dr1, dr2, dr3, indim]
 		y_p = smi_model_train( X_train, y_train, X_test, y_test, desc, params)[8][:,0]
@@ -69,6 +72,7 @@ else:
     kfold = TimeSeriesSplit(n_splits=5)
     cvidx = 0
     result=[]
+    print(os.getcwd())
     X_train, y_train, desc = getdata("pubchem", dataname, indim)
     for tr, te in kfold.split(X_train, y_train):
         print (len(tr))

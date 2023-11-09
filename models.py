@@ -1,5 +1,9 @@
-from sequtils     import *
-from models import *
+from sequtils import *
+import numpy as np
+from keras.models import Model
+from keras.layers import Input, LSTM, Convolution1D, Dropout, GRU, Flatten, Dense, Activation, Masking, Dense, Add
+
+
 
 #---------------------------------------------------------------------------
 # Model Building
@@ -8,7 +12,7 @@ from models import *
 def bootstrap_sampling_before( data, indices ):
   NP = len(indices[0])
   NN = len(indices[1])
-  print NP, NN
+  print (NP, NN)
   if NP < NN : SN = NP
   else : SN = NN
 
@@ -54,7 +58,6 @@ def smi_model_train( X_train, y_train, X_test, y_test, desc, params ) :
 	print('SMI Build model...')
 	print('X_train shape:', X_train.shape)
 	print('X_test shape:', X_test.shape)
-
 	inputs = Input(shape=(X_train.shape[1:]))
 
 	X = Convolution1D(n_filters,filter_len, activation='relu')(inputs)
@@ -130,7 +133,7 @@ def smi_reslstm( X_train, y_train, X_test, y_test, desc, params ) :
 	rnn_depth=10
 	for i in range(rnn_depth):
 		x_rnn = LSTM(rnn_width, recurrent_dropout=rnn_dropout, dropout=rnn_dropout, return_sequences=True)(x)
-		x = add([x, x_rnn])
+		x = Add([x, x_rnn])
 	X=x
 	X = LSTM(rnn_len)(X)
 	Y = Dense(1,activation='sigmoid', kernel_initializer='uniform')(X)
@@ -182,7 +185,7 @@ def smi_model_train_bagging( X_train, y_train, X_test, y_test, desc, params, MAX
 	y_pred = np.zeros( (MAXITR, len(X_test), 1) )
 	Wsave = model.get_weights()
 	for i in range(MAXITR) :
-		print "bagging idx:",i
+		print ("bagging idx:", i)
 		model.set_weights(Wsave)
 		model.reset_states()
 		model = Varweightfit(X_train, y_train, X_test, y_test, desc, EPOCH, model)
@@ -220,7 +223,7 @@ def fp_model_train_bagging( X_train, y_train, X_test, y_test, MAXITR, desc ) :
 	y_pred = np.zeros( (MAXITR, len(X_test), 1) )
 	Wsave = model.get_weights()
 	for i in range(MAXITR) :
-		print "bagging idx:",i
+		print ("bagging idx:", i)
 		model.set_weights(Wsave)
 		model.reset_states()
 		model = Varweightfit(X_train, y_train, X_test, y_test, desc, EPOCH, model)
@@ -254,7 +257,7 @@ def fp_model_train_repeat( X_train, y_train, X_test, y_test, MAXITR, desc ) :
 	y_pred = np.zeros( (MAXITR, len(X_test), 1) )
 	Wsave = model.get_weights()
 	for i in range(MAXITR) :
-		print "repeat idx:",i
+		print ("repeat idx:", i)
 		model.set_weights(Wsave)
 		model.reset_states()
 		his = model.fit(X_train, y_train, epochs=EPOCH, batch_size=256, shuffle=True,

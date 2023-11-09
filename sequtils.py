@@ -1,34 +1,23 @@
 import sys, os
 import csv
 import math
-import numpy as np
 import operator
 import numpy as np
 
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem
 
-from sklearn.model_selection import train_test_split, StratifiedKFold, TimeSeriesSplit
 from sklearn.metrics import roc_auc_score, confusion_matrix
-from sklearn import svm, metrics, linear_model
+from sklearn import svm, linear_model
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier 
 from sklearn.neural_network import MLPClassifier
-from sklearn.calibration import CalibratedClassifierCV
 
 
-from keras.models import Model, Sequential, load_model
 from keras.preprocessing import sequence
 from keras.optimizers import *
-from keras.layers import Input, RepeatVector, TimeDistributed, merge, add
-from keras.layers import Dense, Dropout, Activation, Lambda, Embedding
-from keras.layers import LSTM, Bidirectional, GRU, Masking
-from keras.layers import Convolution1D, MaxPooling1D, GlobalMaxPooling1D
-from keras.layers.core import Flatten
-from keras import backend as K
-from keras import objectives
 
 
 class CharacterTable(object):
@@ -206,8 +195,8 @@ def run_svm(X_train, X_test, y_train, y_test, desc) :
 	clf  = lsvm
 	clf.fit(X_train, y_train)
 	for c in clf.coef_[0]:
-		print c,
-	print ""
+		print (c),
+	print ("")
 		
 	return print_clf_result( y_test, clf.decision_function(X_test), clf.predict(X_test), desc)
 
@@ -271,7 +260,7 @@ def average_len( sequences ) :
 	seqlen = []
 	for seq in sequences :
 		seqlen.append( len(seq) )
-	print "Average seq len:", np.mean(seqlen)
+	print ("Average seq len:", np.mean(seqlen))
 
 
 #---------------------------------------------------------------------------
@@ -289,7 +278,16 @@ def getdata(rtype, dataname, indim=20):
 	Y  = np.array([ int(int(s)>0) for s in data[:,1] ])
 
 	if rtype=="smiles":
-		XS = np.array([ ctable.encode(chemdb.transsmi(idx)) for idx in data[:,0]])
+		print(data[:,0])
+		XS = []
+		for idx in data[:,0]:
+			try:
+				encoded = ctable.encode(chemdb.transsmi(idx))
+				XS.append(encoded)
+			except:
+				print(chemdb.transsmi(idx))
+				print("Exception")
+
 		X = sequence.pad_sequences(XS, maxlen=MAXLEN, truncating='post')
 	elif rtype=="pubchem":
 		X = np.array([ chemdb.transfp(idx) for idx in data[:,0]])
@@ -299,5 +297,7 @@ def getdata(rtype, dataname, indim=20):
 		X = np.array([ chemdb.transMACCS(idx) for idx in data[:,0]])
 
 	desc = rtype+" "+dataname+" "
+	print("X len: ", len(X))
+	print("Y len: ", len(Y))
 	return X, Y, desc
 
