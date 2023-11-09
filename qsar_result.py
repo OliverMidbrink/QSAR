@@ -36,7 +36,7 @@ def get_clf_result( y_true, y_score, desc="" ) :
 	npv = 0 if fn==0 else float(tn)/(tn+fn)
 	f1s = 0 if tp==0 else float(2*tp)/(2*tp+fp+fn)
 	print ("\nauc    acc    mcc    tpr    tnr    ppv    npv    f1s\t"+desc)
-        print ('%.4f'%auc, '%.4f'%acc, '%.4f'%mcc, '%.4f'%tpr, '%.4f'%tnr, '%.4f'%ppv, '%.4f'%npv, '%.4f'%f1s)
+	print ('%.4f'%auc, '%.4f'%acc, '%.4f'%mcc, '%.4f'%tpr, '%.4f'%tnr, '%.4f'%ppv, '%.4f'%npv, '%.4f'%f1s)
 
 	return [auc, acc, mcc, tpr, tnr, ppv, npv, f1s, y_score, mcc]
 
