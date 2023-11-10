@@ -39,7 +39,7 @@ def final_test(idx, X_train, y_train, X_test, y_test, repre, method, desc, path 
 		params = [EPOCH, FFL, n_filters, filter_len, rnn_len, dr1, dr2, dr3, indim]
 		y_p = smi_model_train( X_train, y_train, X_test, y_test, desc, params)[8][:,0]
 	else :
-		if method.startswith("svm")   :y_p = run_svm ( X_train, X_test, y_train, y_test, desc)[8]
+		if method.startswith("svm")   :y_p = run_svm ( X_train, X_test, y_train, y_test, desc)[8];print("running SVM")
 		elif method.startswith("rf")  :y_p = run_rf  ( X_train, X_test, y_train, y_test, desc)[8]
 		elif method.startswith("gbm") :y_p = run_gbm ( X_train, X_test, y_train, y_test, desc)[8]
 		elif method.startswith("nnbg"):y_p = fp_model_train_bagging( X_train, y_train, X_test, y_test, MAXITR, desc)[8][:,0]
